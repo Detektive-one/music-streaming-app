@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #6699cc;
+        }
+
+        header {
+            background-color: #003b6d;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .fixed-top {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .songplayer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #003b6d;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .songplayer-brand a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .search-bar input {
+            padding: 5px;
+        }
+
+        .search-bar button {
+            padding: 5px 10px;
+            background-color: #fff;
+            color: #333;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .search-bar button:hover {
+            background-color: #d8d9ff;
+        }
+
+        .dashboard-buttons a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #003b6d;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #003b6d;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ebedf3;
+        }
+
+        tr:hover {
+            background-color: #d8d9ff;
+        }
+
+        .song-link {
+            text-decoration: none;
+            color: #003b6d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="fixed-top">
+        <div class="songplayer-bar">
+            <div class="songplayer-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class="search-bar" action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <h1>Search Results for "{{ query }}"</h1>
+
+    {% if songs %}
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Genre</th>
+            <th>Album</th>
+            <th>Length</th>
+        </tr>
+        {% for song in songs %}
+        <tr>
+            <td> <img src="{{ url_for('static', filename=song.song_icon) }}" alt="{{ song.title }} Cover"
+                    class="song-image" style="width: 40px; height: 40px;"></td>
+            </td>
+            <td><a class="song-link" href="{{ url_for('song_player', song_id=song.id) }}">{{ song.title }}</a></td>
+            <td>{{ song.artist }}</td>
+            <td>{{ song.genre }}</td>
+            <td>{% if song.album_id is not none %}
+                <a class="song-link" href="{{ url_for('album', album_id=song.album_id) }}">{{ song.album_name }}</a>
+                {% else %}
+                {{ song.album_name }}
+                {% endif %}
+            </td>
+            <td>{{ song.length }} minutes</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+
+</body>
+
+</html>

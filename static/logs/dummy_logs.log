@@ -1,0 +1,12 @@
+2022-01-25 14:30:00 INFO: User accessed the home page
+2022-01-25 14:35:12 INFO: User john_doe logged in
+2022-01-25 15:00:45 WARNING: Failed login attempt for user admin
+2022-01-25 15:10:22 INFO: New song added - "Beautiful Melody"
+2022-01-25 16:05:30 ERROR: Database connection error
+2022-01-25 16:30:00 INFO: User alice logged in
+2022-01-25 17:15:42 INFO: User john_doe created a playlist - "My Favorites"
+2022-01-25 18:00:03 INFO: User bob commented on the song "Beautiful Melody"
+2022-01-25 19:20:18 INFO: User admin logged in
+2022-01-25 20:45:55 WARNING: Failed login attempt for user alice
+2022-01-25 21:10:12 INFO: User john_doe logged out
+2022-01-25 22:05:30 ERROR: Song not found - "Missing Track"

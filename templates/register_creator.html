@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style> 
+ 
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: url("{{ url_for('static', filename='assets/BG.png') }}") no-repeat center center fixed;
+        background-size: cover;
+    }
+   
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-group-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1;
+  margin-right: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.social-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.register-button {
+  margin-top: 15px; 
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.register-button:hover {
+  background-color: #45a049;
+}
+
+  
+  </style>
+  <title>Creator Registration</title>
+</head>
+<body>
+    <div class="container">
+      <div class="form-container">
+        <h1>Creator Registration</h1>
+        <form method="POST" action="{{ url_for('register_creator') }}">
+
+        <div class="form-section">
+          <h2>Account Details</h2>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="full_name">Full Name:</label>
+              <input type="text" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required value="{{ user_email }}">
+          </div>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+              <label for="confirm_password">Confirm Password:</label>
+              <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Creator Details</h2>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" required value="{{ user_username }}">
+          </div>
+            <div class="form-group">
+              <label for="artist_name">Artist Name:</label>
+              <input type="text" id="artist_name" name="artist_name" required>
+            </div>
+            <div class="form-group">
+              <label for="genre">Genre:</label>
+              <select id="genre" name="genre">
+                <option value="pop">Pop</option>
+                <option value="rock">Rock</option>
+                <option value="hip-hop">Hip-hop</option>
+                <option value="electronic">Electronic</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" required></textarea>
+          </div>
+        </div>
+        
+        <h3>Social Media Links</h3>
+        <div class="social-links">
+          <div class="form-group">
+            <label for="facebook">Facebook:</label>
+            <input type="url" id="facebook" name="facebook">
+          </div>
+          <div class="form-group">
+            <label for="instagram">Instagram:</label>
+            <input type="url" id="instagram" name="instagram">
+          </div>
+        </div>
+        
+        <button type="submit" class="register-button">Register</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  
+</html>
+

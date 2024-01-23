@@ -1,0 +1,13 @@
+your_flask_app/
+├── templates/
+│   ├── login.html
+│   ├── register_creator.html
+│   ├── register_user.html
+│   └── index.html
+├── static/
+│   └── styles.css
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+└── run.py

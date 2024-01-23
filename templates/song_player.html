@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='songplayer_styles.css') }}">
+
+    <title>Song Player</title>
+</head>
+
+<body>
+    <header class="fixed-top">
+        <div class="songplayer-bar">
+            <div class="songplayer-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class=search-bar action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="scrollable-content">
+        <div class="songplayer-container">
+            <img src="{{ url_for('static', filename=song.song_icon) }}" alt="{{ song.title }} Cover" class="song-image">
+            <h1>{{ song.title }}</h1>
+            <p class="artist-genre">{{ song.artist }} | {{ song.genre }}</p>
+
+            <div class="static-rate" id="average-rating" data-rating="{{ average_rating }}">
+
+                {% for _ in range((average_rating | int)) %}
+                <span style="display: inline-block;" class="star gold-star">&#9733; </span>
+                {% endfor %}<span style="display: inline-block;">Rating: {{ average_rating }}</span>
+            </div>
+            <div class="song-container">
+                <div class="lyrics-container">
+                    <button type="button" class="collapsible">Lyrics</button>
+                    <div class="lyrics">
+                        <pre>{{ lyrics }}</pre>
+                    </div>
+                </div>
+
+
+                <div class="feature">
+                    <h2>Comments</h2>
+                    <ul>
+                        {% for comment in comments %}
+                        <li>
+                            <strong>{{ comment['username'] }}</strong> - {{ comment['timestamp'] }}:<br>
+                            {{ comment['text'] }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="song-features">
+
+                <div class="feature">
+                    <h2>Leave a Comment</h2>
+                    <form action="{{ url_for('song_player', song_id=song.id) }}" method="post">
+                        <textarea name="comment" rows="4" cols="50" placeholder="Write your comment here..."></textarea>
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+      
+                <div class="feature">
+                    <form method="post">
+                        <h2>Rate the Song</h2>
+                        <div class="rate">
+                            <input type="radio" id="star5" name="rating" value="5" />
+                            <label for="star5" title="5 stars">5 stars</label>
+                            <input type="radio" id="star4" name="rating" value="4" />
+                            <label for="star4" title="4 stars">4 stars</label>
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label for="star3" title="3 stars">3 stars</label>
+                            <input type="radio" id="star2" name="rating" value="2" />
+                            <label for="star2" title="2 stars">2 stars</label>
+                            <input type="radio" id="star1" name="rating" value="1" />
+                            <label for="star1" title="1 star">1 star</label>
+                        </div>
+                        <button class="submit-rating">Submit Rating</button>
+                    </form>
+                </div>
+
+                <div class="feature">
+                    <h2>Add a Note </h2>
+                    <textarea rows="4" cols="50" placeholder="Write your private note here..."></textarea>
+                    <button>Save Note</button>
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+
+    </main>
+
+    <footer class="fixed-bottom">
+        <div id="audio-player-container">
+            <div id="audio-info">
+                <img src="{{ url_for('static', filename=song.song_icon) }}" alt="{{ song.title }} Cover"
+                    class="song-image">
+                <h3>{{ song.title }}</h3>
+                <div style="display: flex; align-items: center;">
+                    <div id="play-pause-btn" style="font-size: 24px; padding: 10px;"></div>
+                    <div id="stop-btn" style="font-size: 24px; padding: 10px;">⏹</div>
+                </div>
+            </div>
+
+            <div id="audio-controls">
+
+                <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1">
+                <div id="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <span id="time-display">0:00 / 0:00</span>
+            </div>
+            <audio id="audio" controls>
+                <source src="{{ url_for('static', filename=song.file_path) }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+    </footer>
+
+    <script src="{{ url_for('static', filename='songplayer_script.js') }}"></script>
+
+</body>
+
+</html>

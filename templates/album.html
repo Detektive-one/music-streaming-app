@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='playlist_styles.css') }}">
+    <style> table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #003b6d;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #003b6d;
+        color: #fff;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ebedf3;
+    }
+
+    tr:hover {
+        background-color: #d8d9ff;
+    }
+
+    .song-link {
+        text-decoration: none;
+        color: #003b6d;
+    }</style>
+
+    <title>Album</title>
+</head>
+
+<body>
+
+    <header class="fixed-top">
+        <div class="songplayer-bar">
+            <div class="songplayer-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class="search-bar" action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <h2>{{ album.name }}</h2>
+
+        <div class="playlist-buttons">
+            <button id="play-btn" onclick="playCurrentSong()">Play Album</button>
+            
+            {% if album.creator_id == current_user.id %}
+            <div class="dropdown">
+                <button class="options-btn">Options</button>
+                <div class="dropdown-content">
+                    <a href="#addSongModal">Add Song</a>
+                    <a href="#changeNameModal">Change Name</a>
+                    <a href="#deleteModal">Delete Album</a>
+                </div>
+            </div>{% endif %}
+        </div>
+
+        
+        <div class="option">
+            <div id="addSongModal" class="modal-window">
+                <div>
+                    <a href="#" title="Close" class="modal-close">Close</a>
+                    <h1>Add Songs to Album</h1>
+
+
+                    <form id="searchForm" method="post" action="{{ url_for('album', album_id=album.id)}}">
+                        <input type="hidden" name="from_modal" value="true">
+                        <div class="playlist-details">
+                            <label for="search-songs">Search for songs:</label>
+                            <input type="text" id="search-songs" name="search_text" placeholder="Search for songs">
+                        </div>
+                        <button type="submit" id="search-songs-button">Search</button>
+                    </form>
+                   
+                    <form method="post">
+                    <ul class="songs-list">
+                        {% for song in song_searched %}
+                        <li>
+                            <input type="checkbox" name="selected_songs" value="{{ song.id }}"
+                                >
+                            {{ song.title }} by {{ song.artist }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    
+                        
+                        <button type="submit" id="add-songs-button">Add Songs</button>
+                    </form>
+
+                </div>
+            </div>
+
+
+            <div id="changeNameModal" class="modal-window">
+                <div>
+                    <a href="#" title="Close" class="modal-close">Close</a>
+                    <h1>Change Album Name</h1>
+                    <form method="post" action="{{ url_for('album', album_id=album.id)}}">
+                        <input type="hidden" name="action" value="change_name">
+                        <input type="hidden" name="album_id" value="{{ album.id }}">
+                        <label for="new_album_name">New Album Name:</label>
+                        <input type="text" id="new_album_name" name="new_album_name" required>
+                        <button type="submit">Change Name</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <div id="deleteModal" class="modal-window">
+                <div>
+                    <a href="#" title="Close" class="modal-close">Close</a>
+                    <h1>Are you sure you want to delete the Album?</h1>
+                    <form method="post" action="{{ url_for('album', album_id=album.id)}}">
+                        <input type="hidden" name="action" value="delete_album">
+                        <input type="hidden" name="album_id" value="{{ album.id }}">
+                        <button type="submit">Delete Album</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+
+
+        {% if songs %}
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Length</th>
+            </tr>
+            {% for song in songs %}
+                <tr>
+                    <td> <img src="{{ url_for('static', filename=song.song_icon) }}" alt="{{ song.title }} Cover" class="song-image" style="width: 40px; height: 40px;"></td>                    </td>
+                    <td><a class="song-link" href="{{ url_for('song_player', song_id=song.id, song_title=song.title, song_artist=song.artist) }}">{{ song.title }}</a></td>
+                    <td>{{ song.artist }}</td>
+                    <td>{{ song.genre }}</td>                    
+                    <td>{{ song.length }} minutes</td>
+                </tr>
+            {% endfor %}
+        </table>
+ 
+    {% endif %}
+    </div>
+
+
+    <footer class="fixed-bottom">        
+            {% if songs %}
+            <div id="audio-info">
+                <img src="{{ url_for('static', filename=songs[0]['song_icon']) }}" alt="{{ songs[0]['title'] }} Cover" class="song-image">
+                <h3>{{ songs[0]['title'] }}</h3>
+                <div style="display: flex; align-items: center;">
+                    <div id="play-pause-btn" style="font-size: 24px; padding: 10px;"></div>
+                    <div id="stop-btn" style="font-size: 24px; padding: 10px;">⏹</div>
+                </div>
+            </div>
+    
+        {% endif %}
+
+
+        <div id="audio-controls">
+            <input type="range" id="volume-control" min="0" max="1" step="0.1" value="1">
+            <div id="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <span id="time-display">0:00 / 0:00</span>
+        </div>
+
+
+        <audio id="audio" controls>
+
+            {% for song in songs %}
+            <source src="" type="audio/mpeg">
+            {% endfor %}
+            Your browser does not support the audio element.
+        </audio>
+    </footer>
+
+    <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                fetch(this.action, {
+                    method: this.method,
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        var songsList = document.querySelector('.songs-list');
+                        songsList.innerHTML = '';
+                        data.songs.forEach(function (song) {
+                            var li = document.createElement('li');
+                            li.innerHTML = '<input type="checkbox" name="selected_songs" value="' + song.id + '">' +
+                                song.title + ' by ' + song.artist;
+                            songsList.appendChild(li);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+            document.querySelector('.songs-list').addEventListener('change', updateSongIDs);
+        });
+
+        var audio = document.getElementById('audio');
+        var playPauseBtn = document.getElementById('play-pause-btn');
+        var stopBtn = document.getElementById('stop-btn');
+        var volumeControl = document.getElementById('volume-control');
+        var progressBar = document.getElementById('progress-bar');
+        var timeDisplay = document.getElementById('time-display');
+        var baseAudioURL = "{{ url_for('static', filename='') }}";
+        var songs = JSON.parse('{{ songlist | tojson | safe }}');
+        var currentSongIndex = 0;
+        var isChangingSong = false;
+
+        function playCurrentSong() {
+            audio.src = baseAudioURL + songs[currentSongIndex]['file_path'];
+            audio.play();
+
+            
+            var audioInfo = document.getElementById('audio-info');
+            audioInfo.innerHTML = ''; 
+
+            var img = document.createElement('img');
+            img.src = baseAudioURL + songs[currentSongIndex]['song_icon'];
+            img.alt = `${songs[currentSongIndex]['title']} Cover`;
+            img.classList.add('song-image');
+            audioInfo.appendChild(img);
+
+            var h3 = document.createElement('h3');
+            h3.textContent = songs[currentSongIndex]['title'];
+            audioInfo.appendChild(h3);
+
+            var controlsDiv = document.createElement('div');
+            controlsDiv.style.display = 'flex';
+            controlsDiv.style.alignItems = 'center';
+
+            var playPauseBtn = document.createElement('div');
+            playPauseBtn.id = 'play-pause-btn';
+            playPauseBtn.style.fontSize = '24px';
+            playPauseBtn.style.padding = '10px';
+            playPauseBtn.addEventListener('click', function () {
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            });
+            controlsDiv.appendChild(playPauseBtn);
+
+            var stopBtn = document.createElement('div');
+            stopBtn.id = 'stop-btn';
+            stopBtn.style.fontSize = '24px';
+            stopBtn.style.padding = '10px';
+            stopBtn.textContent = '⏹';
+            stopBtn.addEventListener('click', function () {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            controlsDiv.appendChild(stopBtn);
+
+            audioInfo.appendChild(controlsDiv);
+
+
+            audio.addEventListener('playing', function () {
+                playPauseBtn.classList.add('playing');
+            });
+
+
+            audio.addEventListener('pause', function () {
+                playPauseBtn.classList.remove('playing');
+            });
+        }
+
+        audio.addEventListener('ended', function () {
+
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            playCurrentSong();
+        });
+        volumeControl.addEventListener('input', function () {
+            audio.volume = volumeControl.value;
+            timeDisplay.innerText = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+        });
+
+        progressBar.addEventListener('click', function (event) {
+            var clickPosition = event.clientX - progressBar.getBoundingClientRect().left;
+            var newProgress = (clickPosition / progressBar.offsetWidth) * 100;
+            progressBar.querySelector('.progress').style.width = newProgress + '%';
+            audio.currentTime = (newProgress / 100) * audio.duration;
+        });
+
+        audio.addEventListener('timeupdate', function () {
+            var progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.querySelector('.progress').style.width = progress + '%';
+            timeDisplay.innerText = formatTime(audio.currentTime) + ' / ' + formatTime(audio.duration);
+        });
+
+        function formatTime(time) {
+            var minutes = Math.floor(time / 60);
+            var seconds = Math.floor(time % 60);
+            return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        }
+
+    </script>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='creator_styles.css') }}">
+</head>
+<body>
+    <header class="fixed-top">
+        <div class="dashboard-bar">
+            <div class="dashboard-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class=search-bar action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="tabs-container">
+        <div class="profile">
+            <img src="{{ url_for('static', filename='assets/creator.png') }}" alt="Profile Picture" class="profile-pic">
+            <h3>{{ creator_info.artist_name }}</h3>
+            <h3>@{{ creator_info.username }}</h3>
+        </div>
+        <label for="tab1">Songs and Albums</label>
+        <label for="tab2">Stats and Analytics</label>
+        <label for="tab3">Settings</label>
+    </section>
+
+    <input name="tab" id="tab1" type="radio" checked />
+    <section class="tab-content">
+        <div class="content-header">
+            <div class="card total-songs">
+                <h4>Total Songs</h4>
+                <p>{{ total_songs }}</p>
+            </div>
+            <div class="card total-albums">
+                <h4>Total Albums</h4>
+                <p>{{ total_albums }}</p>
+            </div>
+        </div>
+
+        <div class="all-songs">
+            <h2>All Songs</h2>
+            <div class="cards">
+                {% for song in songs %}
+
+                <a href="{{ url_for('song_player', song_id=song.id) }}">
+                    <div class="song-card">
+                        <img src="{{ url_for('static', filename=song.song_icon) }}" alt="Song Image">
+
+                        <h3>{{ song.title }}</h3>
+                        <p>Artist: {{ creator_info.artist_name }}</p>
+                    </div>
+                </a>{% endfor %}
+            </div>
+
+            <label for="add-song-modal" class="add-song-button">Add Song</label>
+            <input type="checkbox" id="add-song-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="add-song-modal" class="close-modal">X</label>
+                <form action="{{ url_for('creator_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Add Song</h3>
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+
+                    <label for="artist">Artist:</label>
+                    <input type="text" id="artist" name="artist" required value="{{ creator_info.artist_name }}">
+
+                    <label for="album">Album:</label>
+                    <input type="text" id="album" name="album">
+
+                    <label for="genre">Genre:</label>
+                    <input type="text" id="genre" name="genre">
+
+                    <label for="length">Length:</label>
+                    <input type="text" id="length" name=" length">
+
+                    <label for="release_year">Release Year:</label>
+                    <input type="number" id="release_year" name="release_year">
+
+                    <input type="hidden" name="creator_id" value="{{ current_user.id }}">
+
+                    <label for="audio_file">Audio File:</label>
+                    <input type="file" id="audio_file" name="audio_file" accept=".mp3" required>
+
+                    <label for="icon_file">Icon File:</label>
+                    <input type="file" id="icon_file" name="icon_file" accept=".png, .jpg, .jpeg">
+
+                    <button type="submit">Add Song</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="all-albums">
+            <h2>All Albums</h2>
+            <div class="cards">
+                {% for album in albums %}
+                <a href="{{ url_for('album', album_id=album.id) }}">
+                    <div class="album-card">
+                        <img src="{{ url_for('static', filename=album.album_icon) }}" alt="Album Cover">
+                        <h3>{{ album.name }}</h3>
+                        <p>Release Date: {{ album.date_created.strftime('%d-%m-%Y') }}</p>
+                    </div>
+                </a>{% endfor %}
+            </div>
+
+            <label for="create-album-modal" class="create-album-button">Create Album</label>
+            <input type="checkbox" id="create-album-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="create-album-modal" class="close-modal">X</label>
+                <form action="{{ url_for('creator_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Create Album</h3>
+
+                    <label for="album_name">Album Name:</label>
+                    <input type="text" id="album_name" name="album_name" required>
+
+                    <label for="album_icon">Album Icon:</label>
+                    <input type="file" id="album_icon" name="album_icon" accept=".png, .jpg, .jpeg" required>
+
+                    <input type="hidden" name="creator_id" value="{{ current_user.id }}">
+                    <button type="submit">Create Album</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <input name="tab" id="tab2" type="radio" />
+    <section class="tab-content">
+        <h2>Stats and Analytics</h2>
+        <div class="analytics-section">
+            <canvas id="ratingsChart" width="400" height="200"></canvas>
+            <canvas id="commentsChart" width="400" height="200"></canvas>
+            <canvas id="playCountChart" width="400" height="200"></canvas>
+        </div>
+        <div class="popular-content">
+            <h3>Popular Songs</h3>
+        </div>
+    </section>
+
+    <input name="tab" id="tab3" type="radio" />
+    <section class="tab-content">
+        <div class="settings-options">
+            <h2>Settings</h2>
+            <label for="change-username-modal" class="settings-button">Change Username</label>
+            <input type="checkbox" id="change-username-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="change-username-modal" class="close-modal">X</label>
+                <form action="{{ url_for('creator_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Change Username</h3>
+                    <label for="new-username">New Username:</label>
+                    <input type="text" id="new-username" name="new_username" required>
+                    <button type="submit">Change Username</button>
+                </form>
+            </div>
+
+            <label for="change-email-modal" class="settings-button">Change Email</label>
+            <input type="checkbox" id="change-email-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="change-email-modal" class="close-modal">X</label>
+
+                <form action="{{ url_for('creator_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Change Email</h3>
+                    <label for="new-email">New Email ID:</label>
+                    <input type="text" id="new-email" name="new_email" required>
+
+                    <button type="submit">Change Email</button>
+                </form>
+            </div>
+
+            <label for="change-password-modal" class="settings-button">Change Password</label>
+            <input type="checkbox" id="change-password-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="change-password-modal" class="close-modal">X</label>
+                <form action="{{ url_for('creator_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Change Password</h3>
+                    <label for="old-password">Old Password:</label>
+                    <input type="password" id="old-password" name="old_password" required>
+                    <label for="new-password">New Password:</label>
+                    <input type="password" id="new-password" name="new_password" required>
+                    <label for="confirm-new-password">Confirm New Password:</label>
+                    <input type="password" id="confirm-new-password" name="confirm_new_password" required>
+                    <button type="submit">Change Password</button>
+                </form>
+            </div>
+
+            <label for="delete-account-modal" class="settings-button delete-account">Delete Creator Account</label>
+            <input type="checkbox" id="delete-account-modal" class="modal-toggle">
+            <div class="modal">
+                <label for="delete-account-modal" class="close-modal">X</label>
+                <form action="{{ url_for('user_dashboard') }}" method="post" enctype="multipart/form-data">
+                    <h3>Confirm once more if you want to Delete this Account.</h3>
+                    <input type="hidden" name="creator_id" value="{{ current_user.id }}">
+                    <button type="delete-account">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

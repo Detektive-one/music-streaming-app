@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_styles.css') }}">
+
+    <title>User Dashboard</title>
+</head>
+
+<body>
+    <header class="fixed-top">
+        <div class="dashboard-bar">
+            <div class="dashboard-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class=search-bar action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="trending-songs">
+            <h2>Latest Songs</h2>
+            <div class="song-section">
+                {% for song in songs[-4:] %}
+                <div class="song-item"> 
+                    <a
+                        href="{{ url_for('song_player', song_id=song.id, song_title=song.title, song_artist=song.artist) }}">
+                        <img src="{{ url_for('static', filename= song.song_icon) }}" alt="{{ song.title }} Cover"
+                            class="song-image">
+                        <p>{{ song.title }} by {{ song.artist }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </section>
+
+
+        <section id="recommended-songs">
+            <h2>Recommended Songs</h2>
+            <div class="song-section">
+                {% for song in songs[:4] %}
+                <div class="song-item">
+                    <a href="{{ url_for('song_player', song_id=song.id) }}">
+                        <img src="{{ url_for('static', filename= song.song_icon) }}" alt="{{ song.title }} Cover"
+                            class="song-image">
+                        <p>{{ song.title }} by {{ song.artist }}</p>
+                    </a>
+
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="recommended-playlists">
+            <h2>Recommended Albums</h2>
+            <div class="song-section">
+                {% for album in albums %}
+                <div class="song-item">
+                    <a href="{{ url_for('album', album_id=album.id) }}">
+                    <img src="{{ url_for('static', filename= album.album_icon) }}" alt="{{ album.name }} Cover"
+                        class="song-image">
+                    <p>{{ album.name }} by {{ album.creator_name }}</p>
+                </a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section id="genre-list">
+            <h2>Explore by Genre</h2>
+            <div class="genre-buttons">
+                <button><a href="{{ url_for('search_results', query='Pop') }}">Pop</a></button>
+                <button><a href="{{ url_for('search_results', query='Folk Music') }}">Folk Music</a></button>
+                <button><a href="{{ url_for('search_results', query='Instrumental') }}">Instrumental</a></button>               
+            </div>
+        </section>
+    </main>    
+</body>
+
+</html>

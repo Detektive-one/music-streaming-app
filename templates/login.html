@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: url("{{ url_for('static', filename='assets/BG.png') }}") no-repeat center center fixed;
+        background-size: cover;
+    
+        /* background-color: #f4f4f4; */
+    }
+    
+      
+      form {
+        max-width: 300px;
+        margin: 0 auto; /* Center the form horizontally */
+        background-color: #fff; /* Add a background color to the form */
+        padding: 50px; /* Add padding for a cleaner look */
+        border-radius: 8px; /* Add rounded corners to the form */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+      }
+      
+      input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: 1px solid #ccc;
+        border-radius: 4px; /* Adjust the border-radius for a softer look */
+        box-sizing: border-box;
+        display: block;
+        font-size: 14px; /* Adjust the font size for better readability */
+        margin-bottom: 1rem;
+        padding: 10px;
+        width: 100%;
+      }
+      
+      input[type="checkbox"] {
+        -webkit-appearance: checkbox;
+        -moz-appearance: checkbox;
+        appearance: checkbox;
+        display: inline-block;
+        width: auto;
+        margin-right: 5px; /* Add some space between the checkbox and text */
+      }
+      
+      input[type="password"] {
+        margin-bottom: 1rem;
+      }
+      
+      input[type="submit"] {
+        background-color: #015294;
+        border: none;
+        color: #fff;
+        font-size: 1rem;
+        padding: 10px 20px; /* Adjust padding for a more balanced button */
+        cursor: pointer; /* Add a pointer cursor for better usability */
+      }
+      
+      label {
+        color: #666;
+        font-size: 14px; /* Adjust the font size for better readability */
+      }
+      .forgot-password{
+        margin-top: 15px;
+      }
+      
+
+
+      </style>
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+<form method="POST" action="{{ url_for('login') }}">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <div class="remember-me">
+        <input type="checkbox" id="rememberMe" name="rememberMe">
+        <label for="rememberMe">Remember me</label>
+    </div>
+
+    <input type="submit" value="Login">
+</form>
+
+            
+        <div class="forgot-password">
+            <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+        </div>
+    </div>
+</body>
+</html>

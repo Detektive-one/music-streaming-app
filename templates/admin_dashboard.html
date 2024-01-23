@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+
+<body>
+  <header class="fixed-top">
+    <div class="dashboard-bar">
+      <div class="dashboard-brand">
+        <a href="{{ url_for('login') }}">Music App</a>
+      </div>
+      <div>
+        <p>Music App Admin Panel</p>
+      </div>
+      </form>
+      <div class="dashboard-buttons">
+        <a href="{{ url_for('admin_logout') }}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="tabs-container">
+    <label for="tab1">Dashboard</label>
+    <label for="tab2">Song Management</label>
+    <label for="tab3">User Management</label>
+    <label for="tab4">Settings</label>
+  </section>
+
+  <input name="tab" id="tab1" type="radio" checked />
+  <section class="tab-content dashboard">
+    <div class="dashboard-header">
+      <h2>Dashboard</h2>
+      <p>Welcome to the admin dashboard.</p>
+    </div>
+    <div class="dashboard-content">
+      <div class="widget">
+        <h3>Recent Activity</h3>
+        <div class="recent-activity">
+          <ul>
+            {% for log in logs[-10:] %}
+            {% if "INFO " in log %}
+            <li>{{ log }}</li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="widget">
+        <h3>Statistics</h3>
+        <h4>User Statistics</h4>
+        <div class="stats">
+          <ul>
+            {% for key, value in user_stats.items() %}
+            <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="widget">
+        <h3>Quick Actions</h3>
+        <button class="action-button">Filter Recent Activity</button>
+        <button class="action-button">Filter Statistics</button>
+        <button class="action-button">Show All Logs</button>
+      </div>
+    </div>
+  </section>
+
+  <input name="tab" id="tab2" type="radio" />
+  <section class="tab-content">
+    <p>Contents for Song Management</p><br>
+    <input type="text" name="query" placeholder="Search for a song...">
+    <button type="submit">Search</button>
+    <p>Top Ten Songs</p>
+    <div class="song-list">
+      {% for song in songs[:10] %}
+      <details>
+        <summary> # {{song.title}} by {{song.artist}}</summary>
+        <p>Song details for {{song.title}}</p>
+        <div class="widget-container">
+          <div class="widget">
+            <h4>Performance</h4>
+            <p>Data related to performance for Song 1.</p>
+            <div class="bar-chart">
+              <div class="bar" style="height: 80%;"></div>
+              <div class="bar" style="height: 60%;"></div>
+              <div class="bar" style="height: 40%;"></div>
+              <div class="bar" style="height: 20%;"></div>
+              <div class="bar" style="height: 70%;"></div>
+            </div>
+          </div>
+
+          <div class="widget">
+            <h4>Rating</h4>
+            <p>Data related to rating for {{ song.title }}.</p>
+            <ul>
+              {% for user in users %}
+                {% for song_stat in comment_stats %}
+                  {% if song_stat.song_id == song.id %}
+                    {% if song_stat.ratings %}
+                      {% for rating in song_stat.ratings %}
+                        {% if rating.user_id == user.id%}
+                        <li>
+                          <strong>User:</strong> {{ user.username }}<br>
+                          <strong>Rating:</strong> {{ rating.rating }}<br>
+                          <strong>Date:</strong> {{ rating.date }}
+                        </li>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <li>No ratings available for this song.</li>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+
+
+          <div class="widget">
+            <h4>Comments</h4>
+
+            <p>Data related to comments for {{ song.title }}.</p>
+            <ul>
+              {% for song_stat in comment_stats %}
+              {% if song_stat.song_id == song.id %}
+              {% for comment in song_stat.comments %}
+              <li>
+                <strong>Username:</strong> {{ comment.username }}<br>
+                <strong>Timestamp:</strong> {{ comment.timestamp }}<br>
+                <strong>Text:</strong> {{ comment.text }}
+                <div class="comment-options">
+                  <form method="post" action="{{ url_for('admin_dashboard') }}">
+                    <input type="hidden" name="action" value="delete_comment">
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <button type="submit" class="comment-options-button"
+                      onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                  </form>
+                </div>
+              </li>
+              {% endfor %}
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+    </div>
+    </details>{%endfor%}
+    </div>
+  </section>
+
+
+
+  <input name="tab" id="tab3" type="radio" />
+  <section class="tab-content">
+    <p>Contents for User Management</p>
+
+    <input type="text" name="query" placeholder="Search for a user...">
+    <button type="submit">Search</button>
+    <p>Users</p>
+
+
+    <div class="song-list">
+      {% for user in users %}
+      <details>
+        <summary> # username: {{user.username}} Email: {{user.email}}
+          <div class="options">
+            <button class="options-button">Options</button>
+            <div class="options-dropdown">
+              <ul>
+                <li>Edit</li>
+                <li>Delete</li>
+              </ul>
+            </div>
+        </summary>
+
+        <p>User details for {{user.username}}</p>
+        <div class="widget-container">
+          <div class="widget">
+            <h4>Playlists</h4>
+            <p>Data related to Playlists for {{ user.username }}.</p>
+            <ul>
+              {% for playlist_stat in playlist_stats %}
+              {% if playlist_stat.user_id == user.id %}
+              <li>
+                <strong>Playlist Name:</strong> {{ playlist_stat.playlist_title }}<br>
+                <strong>Songs:</strong>
+                <ul>
+                  {% for song in playlist_stat.playlist_songs %}
+                  <li>{{ song.title }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+
+
+
+          <div class="widget">
+            <h4>Rating</h4>
+            <p>Data related to rating for {{ user.username }}.</p>
+            <ul>
+              {% for song in songs %}
+              {% for song_stat in comment_stats %}
+              {% if song_stat.song_id == song.id %}
+              {% if song_stat.ratings %}
+              {% for rating in song_stat.ratings %}
+              {% if rating.user_id == user.id%}
+              <li>
+                <strong>Song Name:</strong> {{ song.title }}<br>
+                <strong>Rating:</strong> {{ rating.rating }}<br>
+                <strong>Date:</strong> {{ rating.date }}
+              </li>
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="widget">
+            <h4>Comments</h4>
+            <p>Data related to comments for {{ user.username }}.</p>
+            <ul>
+              {% for song_stat in comment_stats %}
+
+              {% for comment in song_stat.comments %}
+              {% if comment.id == user.id %}
+              <li>
+                <strong>Song:</strong> {{ comment.song_name }}<br>
+                <strong>Timestamp:</strong> {{ comment.timestamp }}<br>
+                <strong>Text:</strong> {{ comment.text }}
+                <div class="comment-options">
+                  <form method="post" action="{{ url_for('admin_dashboard') }}">
+                    <input type="hidden" name="action" value="delete_comment">
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <button type="submit" class="comment-options-button"
+                      onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                  </form>
+                </div>
+              </li>
+              {% endif %}
+              {% endfor %}
+
+              {% endfor %}
+            </ul>
+          </div>
+
+        </div>
+    </div>
+    </details>{%endfor%}
+
+    <p>Creators</p>
+
+    <div class="song-list">
+      {% for creator in creators %}
+      <details>
+        <summary> # username: {{creator.username}} Name: {{creator.full_name}}
+          <div class="options">
+            <button class="options-button">Options</button>
+            <div class="options-dropdown">
+              <ul>
+                <li>Edit</li>
+                <li>Delete</li>
+              </ul>
+            </div>
+        </summary>
+
+        <p>Creator details for {{creator.full_name}}</p>
+
+        <div class="widget-container">
+          <div class="widget">
+            <h4>Albums</h4>
+            <p>Data related to albums for {{ creator.full_name }}.</p>
+            <ul>
+              {% for creator_stat in creator_stats %}
+              {% if creator_stat.user_id == creator.id%}
+              <li>
+                <strong>Album Name:</strong> {{ creator_stat.album_name }}<br>
+                <strong>Songs:</strong>
+                <ul>
+                  {% for song in creator_stat.album_songs %}
+                  <li>{{ song.title }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {%endif%}
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="widget">
+            <h4>Songs</h4>
+            <p>Data related to songs for {{ creator.full_name }}.</p>
+            <ul>
+              {% for creator_stat in creator_stats %}
+              {% if creator_stat.user_id == creator.id %}
+              {% for song in creator_stat.album_songs %}
+              <li>
+                <strong>Title:</strong> {{ song.title }}
+                <ul>
+                  <li><strong>Genre:</strong> {{ song.genre }}</li>
+                  <li><strong>Release Year:</strong> {{ song.release_year }}</li>
+                  <li><strong>Length:</strong> {{ song.length }} seconds</li>
+                </ul>
+              </li>
+              {% endfor %}
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+    </div>
+    </details>{%endfor%}
+  </section>
+
+
+  <input name="tab" id="tab4" type="radio" />
+  <section class="tab-content">
+    <h3>Database Settings</h3>
+    <h4>[For fine-grain control]</h4>
+    <form action="{{ url_for('admin_dashboard') }}" method="post">
+      <input type="hidden" name="action" value="execute_query">
+      <textarea name="sql_query" rows="10" placeholder="Enter your SQL query here"></textarea>
+      <button type="submit">Execute Query</button>
+    </form>
+    {% if result %}
+    <div class="widget">
+      <h4>Query Result</h4>
+      <p>Data related to the executed query.</p>
+      <table>
+        <thead>
+          <tr>
+            {% for _ in result[0] %}
+            <th>{{ loop.index }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result[0:] %}
+          <tr>
+            {% for col_value in row %}
+            <td>{{ col_value }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </section>
+</body>
+
+</html>

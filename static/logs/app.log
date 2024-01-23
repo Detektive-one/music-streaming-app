@@ -1,0 +1,127 @@
+2024-01-20 20:38:11,313 - INFO - User testuser logged in
+2024-01-20 20:57:43,272 - INFO - User testuser logged in
+2024-01-20 20:57:43,296 - INFO - testuser accessed the user dashboard
+2024-01-20 20:57:59,152 - INFO - Song Another Love was opened
+2024-01-20 20:58:31,117 - INFO - Creator David Kushner created a new album
+2024-01-20 20:58:31,117 - INFO - New Album was created : TestAlbum
+2024-01-20 20:58:44,513 - INFO - Song Dead Man was opened
+2024-01-20 20:58:49,999 - INFO - Song Dead Man was opened
+2024-01-20 20:58:50,654 - INFO - User testuser rated a song
+2024-01-20 20:58:50,665 - INFO - Dead Man got a rating : 5 
+2024-01-20 20:58:50,677 - INFO - Song Dead Man was opened
+2024-01-21 14:22:45,880 - INFO - User testuser logged in
+2024-01-21 14:22:45,914 - INFO - testuser accessed the user dashboard
+2024-01-21 14:22:50,834 - INFO - Song Dead Man was opened
+2024-01-21 14:23:09,516 - INFO - User demo logged in
+2024-01-21 14:23:09,840 - INFO - demo accessed the user dashboard
+2024-01-21 14:23:15,261 - INFO - Song Experience was opened
+2024-01-21 14:23:34,679 - INFO - Song Experience was opened
+2024-01-21 14:23:34,696 - INFO - User demo rated a song
+2024-01-21 14:23:34,696 - INFO - Experience got a rating : 5 
+2024-01-21 14:23:35,019 - INFO - Song Experience was opened
+2024-01-21 14:23:39,003 - INFO - demo accessed the user dashboard
+2024-01-21 14:23:41,244 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:05,829 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:19,735 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:20,360 - INFO - User demo commented on a song
+2024-01-21 14:24:20,360 - INFO - I See Fire  got a comment : best song 
+2024-01-21 14:24:20,376 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:21,109 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:21,751 - INFO - User demo rated a song
+2024-01-21 14:24:21,755 - INFO - I See Fire  got a rating : 5 
+2024-01-21 14:24:21,765 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:34,589 - INFO - Song I See Fire  was opened
+2024-01-21 14:24:48,431 - INFO - Song I See Fire  was opened
+2024-01-21 14:25:32,127 - INFO - Song I See Fire  was opened
+2024-01-21 14:26:32,437 - INFO - Song I See Fire  was opened
+2024-01-21 14:26:42,173 - INFO - demo accessed the user dashboard
+2024-01-21 23:27:58,791 - INFO - User testuser logged in
+2024-01-21 23:27:59,138 - INFO - testuser accessed the user dashboard
+2024-01-21 23:28:02,259 - INFO - Song Daylight was opened
+2024-01-21 23:28:08,452 - INFO - testuser accessed the user dashboard
+2024-01-21 23:28:11,269 - INFO - Song Another Love was opened
+2024-01-21 23:52:56,342 - INFO - User testuser created a playlist
+2024-01-21 23:54:17,208 - INFO - User demo2 logged in
+2024-01-21 23:54:17,530 - INFO - demo2 accessed the user dashboard
+2024-01-21 23:57:47,297 - INFO - User demo2 added I See Fire  to his playlist
+2024-01-23 18:44:30,474 - INFO - User testuser logged in
+2024-01-23 18:44:30,802 - INFO - testuser accessed the user dashboard
+2024-01-23 18:44:39,584 - INFO - Album Footprints I Found was opened
+2024-01-23 18:44:52,866 - INFO - Song Miserable Man was opened
+2024-01-23 19:41:33,954 - INFO - User testuser logged in
+2024-01-23 19:41:33,975 - INFO - testuser accessed the user dashboard
+2024-01-23 19:41:40,481 - INFO - User testuser created a playlist
+2024-01-23 19:41:46,423 - INFO - User testuser created a playlist
+2024-01-23 19:41:59,367 - INFO - User testuser deleted  playlist :  
+2024-01-23 19:44:20,038 - INFO - testuser accessed the user dashboard
+2024-01-23 19:44:47,910 - INFO - User testuser deleted  playlist : anotherTest 
+2024-01-23 19:44:50,486 - INFO - User testuser deleted  playlist : finaltests 
+2024-01-23 19:46:31,557 - INFO - User finalTests logged in
+2024-01-23 19:46:31,868 - INFO - finalTests accessed the user dashboard
+2024-01-23 19:46:38,721 - INFO - User finalTests created a playlist
+2024-01-23 19:46:47,388 - INFO - User finalTests added I See Fire  to his playlist final
+2024-01-23 19:47:58,819 - INFO - User finalTests added Primavera to his playlist final
+2024-01-23 19:51:05,917 - INFO - User testuser logged in
+2024-01-23 19:51:06,240 - INFO - testuser accessed the user dashboard
+2024-01-23 19:51:09,891 - INFO - Album TestAlbum was opened
+2024-01-23 19:51:12,375 - INFO - Album TestAlbum was opened
+2024-01-23 19:51:17,172 - INFO - Album TestAlbum was opened
+2024-01-23 19:51:17,424 - INFO - Album TestAlbum was opened
+2024-01-23 19:51:25,750 - INFO - testuser accessed the user dashboard
+2024-01-23 19:53:27,083 - INFO - testuser accessed the user dashboard
+2024-01-23 19:53:38,753 - INFO - User finalTests logged in
+2024-01-23 19:53:39,086 - INFO - finalTests accessed the user dashboard
+2024-01-23 19:53:47,682 - INFO - User finalTests added Kashmir to his playlist final
+2024-01-23 19:53:57,647 - INFO - User finalTests changed final to Final
+2024-01-23 20:34:00,513 - INFO - User testuser logged in
+2024-01-23 20:34:00,533 - INFO - testuser accessed the user dashboard
+2024-01-23 20:34:17,371 - INFO - testuser accessed the user dashboard
+2024-01-23 20:34:35,114 - INFO - testuser accessed the user dashboard
+2024-01-23 20:35:19,786 - INFO - testuser accessed the user dashboard
+2024-01-23 20:35:21,324 - INFO - Album Footprints I Found was opened
+2024-01-23 20:35:24,348 - INFO - Album TestAlbum was opened
+2024-01-23 20:35:26,529 - INFO - Album Deluxe was opened
+2024-01-23 20:37:09,978 - INFO - testuser accessed the user dashboard
+2024-01-23 20:37:35,733 - INFO - testuser accessed the user dashboard
+2024-01-23 20:37:54,803 - INFO - testuser accessed the user dashboard
+2024-01-23 20:39:34,892 - INFO - testuser accessed the user dashboard
+2024-01-23 20:40:16,124 - INFO - testuser accessed the user dashboard
+2024-01-23 20:40:33,559 - INFO - testuser accessed the user dashboard
+2024-01-23 20:40:42,177 - INFO - testuser accessed the user dashboard
+2024-01-23 21:51:06,140 - INFO - User finalTests logged in
+2024-01-23 21:51:06,160 - INFO - finalTests accessed the user dashboard
+2024-01-23 22:03:05,244 - INFO - New User Registered : new
+2024-01-23 22:03:10,283 - INFO - User new logged in
+2024-01-23 22:03:10,617 - INFO - new accessed the user dashboard
+2024-01-23 22:03:24,075 - INFO - new accessed the user dashboard
+2024-01-23 22:03:27,113 - INFO - new accessed the user dashboard
+2024-01-23 22:06:39,208 - INFO - User new logged in
+2024-01-23 22:06:39,221 - INFO - User new logged in
+2024-01-23 22:06:39,227 - INFO - new accessed the user dashboard
+2024-01-23 22:07:44,720 - INFO - User new logged in
+2024-01-23 22:07:44,740 - INFO - new accessed the user dashboard
+2024-01-23 22:08:40,153 - INFO - New Creator Registered : new , David Kushner
+2024-01-23 22:08:47,100 - INFO - User new logged in
+2024-01-23 22:08:47,123 - INFO - new accessed the user dashboard
+2024-01-23 22:09:28,487 - INFO - Creator David Kushner created a new album
+2024-01-23 22:09:28,487 - INFO - New Album was created : Footprints I Found
+2024-01-23 22:09:31,360 - INFO - Album Footprints I Found was opened
+2024-01-23 22:17:02,689 - INFO - Creator David Kushner added a song
+2024-01-23 22:17:02,689 - INFO - New song was added : Skin and Bones 
+2024-01-23 22:18:32,740 - INFO - Album Footprints I Found was opened
+2024-01-23 22:18:36,325 - INFO - Album Footprints I Found was opened
+2024-01-23 22:18:38,100 - INFO - Album Footprints I Found was opened
+2024-01-23 22:18:38,122 - INFO - Album Footprints I Found was opened
+2024-01-23 22:18:44,347 - INFO - Song Skin and Bones was opened
+2024-01-23 22:18:56,234 - INFO - Song Skin and Bones was opened
+2024-01-23 22:18:57,394 - INFO - User new rated a song
+2024-01-23 22:18:57,396 - INFO - Skin and Bones got a rating : 5 
+2024-01-23 22:18:57,410 - INFO - Song Skin and Bones was opened
+2024-01-23 22:19:03,154 - INFO - Song Skin and Bones was opened
+2024-01-23 22:19:04,024 - INFO - User new commented on a song
+2024-01-23 22:19:04,025 - INFO - Skin and Bones got a comment : test comment 
+2024-01-23 22:19:04,036 - INFO - Song Skin and Bones was opened
+2024-01-23 22:19:12,190 - INFO - User new created a playlist
+2024-01-23 22:19:17,831 - INFO - User new added Skin and Bones to his playlist test
+2024-01-23 22:19:32,272 - INFO - new accessed the user dashboard
+2024-01-23 22:20:06,253 - INFO - new accessed the user dashboard

@@ -1,0 +1,106 @@
+/* color scheme =  #003b6d, #6699cc, #ebedf3, #BDBDBD and #676767. */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #6699cc;
+}
+
+header {
+    background-color: #003b6d;
+    color: #fff;
+    padding: 10px;
+}
+.fixed-top {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1; 
+  }
+
+.dashboard-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003b6d;
+    color: #fff;
+    padding: 10px;
+}
+
+.dashboard-brand a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.search-bar input {
+    padding: 5px;
+}
+.search-bar button {
+    padding: 5px 10px;
+    background-color: #fff;
+    color: #333;
+    border: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.search-bar button:hover {
+    background-color: #d8d9ff;
+}
+
+.dashboard-buttons a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+.genre-buttons button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.song-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+    margin-bottom: 25px; 
+    background-color: #ebedf3;
+    border-radius: 8px;
+}
+
+.song-item {
+    text-align: center;
+    margin-top: 30px;
+    width: 100%; 
+    margin-bottom: 20px;
+}
+
+.song-image {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 8px;
+}
+
+
+  
+
+  
+  

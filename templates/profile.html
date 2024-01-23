@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile_styles.css') }}">
+    <title>Profile</title>
+</head>
+<body>
+    <header class="fixed-top">
+        <div class="songplayer-bar">
+            <div class="songplayer-brand">
+                <a href="{{ url_for('user_dashboard') }}">Music App</a>
+            </div>
+            <form class="search-bar" action="{{ url_for('search_results') }}" method="get">
+                <input type="text" name="query" placeholder="Search for a song...">
+                <button type="submit">Search</button>
+            </form>
+            <div class="dashboard-buttons">
+                <a href="{{ url_for('profile') }}">Profile</a>
+                <a
+                    href="{% if is_creator %}{{ url_for('creator_dashboard') }}{% else %}{{ url_for('register_creator') }}{% endif %}">Creator
+                    Dashboard</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="user-info">
+            <img src="{{ url_for('static', filename='assets/user.png') }}" alt="User Icon">
+            <h2>{{ current_user.username }}</h2>
+        </div>
+
+        <table class="playlists-table">
+            <thead>
+                <tr>
+                    <th>Playlist Name</th>
+                    <th>Songs Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for playlist in playlists %}
+                <tr>
+                    <td><a href="{{ url_for('playlist', playlist_id=playlist.id) }}">{{ playlist.name }}</a></td>
+                    <td>{{ playlist.songs|length }}</td>
+                    <td class="playlist-options">
+                        <div class="dropdown">
+                            <button class="playlist-options-btn" type="button">⚙️</button>
+                            <div class="dropdown-content">
+                                <a href="#addSongModal{{ loop.index }}">Add Song</a>
+                                <a href="#changeNameModal{{ loop.index }}">Change Name</a>
+                                <a href="#deleteModal{{ loop.index }}">Delete Playlist</a>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% for playlist in playlists %}
+        <div id="addSongModal{{ loop.index }}" class="modal-window">
+            <div>
+                <a href="#" title="Close" class="modal-close">Close</a>
+                <h1>Add Songs to Playlist</h1>
+
+
+                <form id="searchForm" method="post" action="{{ url_for('profile') }}">
+                    <input type="hidden" name="from_modal" value="true">
+                    <div class="playlist-details">
+                        <label for="search-songs">Search for songs:</label>
+                        <input type="text" id="search-songs" name="search_text" placeholder="Search for songs">
+                    </div>
+                    <button type="submit" id="search-songs-button">Search</button>
+                </form>
+
+
+
+                <ul class="songs-list">
+                    {% for song in song_searched %}
+                    <li>
+                        <input type="checkbox" name="selected_songs" value="{{ song.id }}" onchange="updateSongIDs()">
+                        {{ song.title }} by {{ song.artist }}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <form method="post">
+                    <input type="hidden" name="action" value="add_songs_to_playlist">
+                    <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+                    <input type="hidden" name="song_ids" id="song-ids-input" value="">
+                    <button type="submit" id="add-songs-button">Add Songs</button>
+                </form>
+
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for playlist in playlists %}
+        <div id="changeNameModal{{ loop.index }}" class="modal-window">
+            <div>
+                <a href="#" title="Close" class="modal-close">Close</a>
+                <h1>Change Playlist Name</h1>
+                <form method="post" action="{{ url_for('profile') }}">
+                    <input type="hidden" name="action" value="change_name">
+                    <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+                    <label for="new_playlist_name">New Playlist Name:</label>
+                    <input type="text" id="new_playlist_name" name="new_playlist_name" required>
+                    <button type="submit">Change Name</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="deleteModal{{ loop.index }}" class="modal-window">
+            <div>
+                <a href="#" title="Close" class="modal-close">Close</a>
+                <h1>Are you sure you want to delete the Playlist?</h1>
+                <form method="post" action="{{ url_for('profile') }}">
+                    <input type="hidden" name="action" value="delete_playlist">
+                    <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+                    <button type="submit">Delete Playlist</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+        <form id="create-playlist-form" method="post" action="{{ url_for('profile') }}">
+            <input type="hidden" name="action" value="create_playlist">
+            <label for="new-playlist-name">New Playlist Name:</label>
+            <input type="text" id="new-playlist-name" name="playlist_name" placeholder="Enter playlist name">
+        </form>
+        <button class="create-playlist-btn" type="submit" form="create-playlist-form">+ Create Playlist</button>
+
+        <section id="trending-songs">
+            <h2>Top Songs Played</h2>
+            <div class="song-section">
+                {% for song in songs[:4] %}
+                <div class="song-item">
+                    <a
+                        href="{{ url_for('song_player', song_id=song.id, song_title=song.title, song_artist=song.artist) }}">
+                        <img src="{{ url_for('static', filename= song.song_icon) }}" alt="{{ song.title }} Cover"
+                            class="song-image">
+                        <p>{{ song.title }} by {{ song.artist }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('searchForm').addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var formData = new FormData(this);
+                    fetch(this.action, {
+                        method: this.method,
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            var songsList = document.querySelector('.songs-list');
+                            songsList.innerHTML = '';
+                            data.songs.forEach(function (song) {
+                                var li = document.createElement('li');
+                                li.innerHTML = '<input type="checkbox" name="selected_songs" value="' + song.id + '">' +
+                                    song.title + ' by ' + song.artist;
+                                songsList.appendChild(li);
+                            });
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+                document.querySelector('.songs-list').addEventListener('change', updateSongIDs);
+            });
+
+            function updateSongIDs() {
+                var songIDs = [];
+                var checkboxes = document.querySelectorAll('input[name="selected_songs"]:checked');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    songIDs.push(checkboxes[i].value);
+                }
+                document.getElementById('song-ids-input').value = songIDs.join(',');
+            }
+        </script>
+</body>
+</html>
